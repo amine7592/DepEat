@@ -1,4 +1,4 @@
-package org.elis.depeat;
+package org.elis.depeat.ui.activities;
 
 import android.content.Intent;
 import android.support.annotation.StringRes;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.elis.depeat.R;
+import org.elis.depeat.Utils;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
