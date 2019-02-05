@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/material_layout_vertical_spacing_between_content_areas"
+    app:cardElevation="@dimen/cardview_default_elevation"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/material_layout_keylines_horizontal_mobile_margin"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/image"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_launcher_background"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/material_layout_vertical_spacing_between_content_areas"
+            tools:text="Ciao a tutti"
+            android:textSize="@dimen/material_typography_title"
+            android:id="@+id/name_tv"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            tools:text="description asdjda dnosadn ndoanda ndoasnda oad"
+            android:textSize="@dimen/material_typography_body1"
+            android:id="@+id/description"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/material_layout_vertical_spacing_between_content_areas"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/material_layout_vertical_spacing_between_content_areas"
+            android:background="@color/material_blue_grey_50"
+            android:layout_height="1dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/min_order"
+            android:layout_marginTop="@dimen/material_layout_vertical_spacing_between_content_areas"
+            tools:text="ordine minimo 15 euro"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view"
+            android:id="@+id/menu_btn"
+            android:layout_gravity="bottom|end"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"/>
+
+
+
+
+    </LinearLayout>
+
+
+
+
+</android.support.v7.widget.CardView>

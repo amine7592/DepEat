@@ -10,5 +10,9 @@
     <string name="password_invalida">Password Invalida</string>
     <string name="welcome">Welcome</string>
     <string name="phone">insert your phone</string>
+    <string name="checkout">Checkout</string>
+    <string name="min_order">Min. order :</string>
+    <string name="view">menu</string>
+    <string name="view_mode">view mode</string>
 </resources>
 
