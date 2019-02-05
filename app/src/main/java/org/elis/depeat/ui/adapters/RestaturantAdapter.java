@@ -25,9 +25,7 @@ public class RestaturantAdapter extends RecyclerView.Adapter {
     private Context context;
 
 
-    public boolean isGridMode() {
-        return isGridMode;
-    }
+
 
     private boolean isGridMode;
 
@@ -41,6 +39,10 @@ public class RestaturantAdapter extends RecyclerView.Adapter {
 
     public void setGridMode(boolean gridMode) {
         isGridMode = gridMode;
+    }
+
+    public boolean isGridMode() {
+        return isGridMode;
     }
 
 
