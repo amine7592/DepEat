@@ -1,42 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:id="@+id/header"
-        android:layout_height="wrap_content">
+        android:layout_height="200dp">
 
-        <!-- TODO  Logo and name-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:id="@+id/shop_iv"
+            android:scaleType="centerCrop"
+            android:layout_height="match_parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/material_light_black"
+            android:alpha="0.7"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Header"/>
+            tools:text="Fraschetta"
+            android:layout_marginStart="8dp"
+            android:textStyle="bold"
+            android:layout_above="@+id/shop_desc_tv"
+            android:id="@+id/shop_name_tv"
+            android:textColor="@color/material_light_white"
+            android:textSize="@dimen/material_typography_display1"/>
 
-    </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="daskadssdasadkladsadsladsadsasdsaadsdsaadsadsadssadasdadsdassaasdasddasdsadsklasd"
+            android:layout_marginStart="4dp"
+            android:textStyle="bold"
+            android:id="@+id/shop_desc_tv"
+            android:textColor="@color/material_light_white"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:textSize="@dimen/material_typography_caption"/>
+
+
+
+    </RelativeLayout>
+
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:id="@+id/product_rv"
+        android:padding="4dp"
         android:layout_below="@id/header"
         android:layout_height="match_parent"/>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
+        android:background="@android:color/white"
+        android:elevation="@dimen/cardview_default_elevation"
         android:layout_alignParentBottom="true"
+        android:padding="@dimen/material_component_cards_left_and_right_padding"
         android:layout_height="wrap_content">
-
-        <!-- TODO  progressBar etc.-->
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Footer"/>
+            style="@style/TextAppearance.AppCompat.Title"
+            android:id="@+id/total_tv"
+            android:text="@string/total"/>
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+            android:max="5"
+            android:id="@+id/progress"
+            tools:progress="3"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:id="@+id/checkout"
+            android:text="@string/checkout"/>
+
+
 
     </LinearLayout>
+
+
 
 </RelativeLayout>

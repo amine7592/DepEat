@@ -1,5 +1,7 @@
 package org.elis.depeat.datamodels;
 
+import java.util.ArrayList;
+
 public class Restaurant {
 
     private String name;
@@ -10,6 +12,7 @@ public class Restaurant {
     private String imageUrl;
 
 
+    private ArrayList<Product> products;
 
     public String getImageUrl() {
         return imageUrl;
@@ -21,10 +24,11 @@ public class Restaurant {
 
 
 
-    public Restaurant(String name, String description, float minimumOrder) {
+    public Restaurant(String name, String address, float minimumOrder) {
         this.name = name;
-        this.description = description;
+        this.address = address;
         this.minimumOrder = minimumOrder;
+        products = new ArrayList<>();
     }
 
     public String getName() {
@@ -53,5 +57,14 @@ public class Restaurant {
 
     public String getDescription() {
         return description;
+    }
+
+
+    public ArrayList<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(ArrayList<Product> products) {
+        this.products = products;
     }
 }
