@@ -108,13 +108,12 @@ public class ProductAdapter extends RecyclerView.Adapter {
                 onQuanityChangedListener.onChange(product.getPrice());
 
             } else if (view.getId() == R.id.remove_btn) {
-                if(product.getQuantity() == 0)return;
+                if (product.getQuantity() == 0) return;
                 product.decreaseQuantity();
-                notifyItemChanged(getAdapterPosition());
                 onQuanityChangedListener.onChange(product.getPrice() * -1);
 
-
             }
+            notifyItemChanged(getAdapterPosition());
 
 
         }

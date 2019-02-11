@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -53,22 +54,28 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
         progressBar = findViewById(R.id.progress);
         productRv = findViewById(R.id.product_rv);
 
+        binData();
+        layoutManager = new LinearLayoutManager(this);
+        adapter = new ProductAdapter(this, restaurant.getProducts());
+        adapter.setOnQuanityChangedListener(this);
+        productRv.setLayoutManager(layoutManager);
+        ((SimpleItemAnimator) productRv.getItemAnimator()).setSupportsChangeAnimations(false);
+        productRv.setAdapter(adapter);
+
+
+
+    }
+
+    //TODO there is some hardcoding inside
+    private void binData(){
+
         restaurant = getRestaurant();
         restaurant.setImageUrl("https://rovato5stelle.files.wordpress.com/2013/11/mcdonald.jpg");
-
         restaurant.setProducts(getProducts());
-
         shopNameTv.setText(restaurant.getName());
         shopAddress.setText(restaurant.getAddress());
         Glide.with(this).load(restaurant.getImageUrl()).into(restaurantIv);
         progressBar.setMax((int)restaurant.getMinimumOrder() * 100);
-
-        layoutManager = new LinearLayoutManager(this);
-        adapter = new ProductAdapter(this, restaurant.getProducts());
-        adapter.setOnQuanityChangedListener(this);
-
-        productRv.setLayoutManager(layoutManager);
-        productRv.setAdapter(adapter);
 
 
     }
@@ -92,7 +99,7 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
 
     private void updateTotal(float item){
         total= total + item;
-        totalTxtView.setText("Total: ".concat( String.valueOf(total)));
+        totalTxtView.setText(getString(R.string.total).concat(String.valueOf(total)));
     }
 
     private void updateProgress(int progress){
