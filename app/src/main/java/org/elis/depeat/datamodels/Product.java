@@ -43,5 +43,9 @@ public class Product {
         this.quantity--;
     }
 
+    public float getSubtotal(){
+        return quantity * price;
+    }
+
 
 }

@@ -1,10 +1,12 @@
 package org.elis.depeat.ui.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -62,6 +64,12 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
         ((SimpleItemAnimator) productRv.getItemAnimator()).setSupportsChangeAnimations(false);
         productRv.setAdapter(adapter);
 
+        checkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ShopActivity.this,CheckoutActivity.class));
+            }
+        });
 
 
     }
@@ -106,9 +114,14 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
         progressBar.setProgress(progress);
     }
 
+    private void enableBttuon(){
+        checkout.setEnabled(total>=restaurant.getMinimumOrder());
+    }
+
     @Override
     public void onChange(float price) {
         updateTotal(price);
         updateProgress((int)total*100);
+        enableBttuon();
     }
 }

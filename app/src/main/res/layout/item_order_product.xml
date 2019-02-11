@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:padding="@dimen/material_layout_vertical_spacing_between_content_areas"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:id="@+id/quantity_tv"
+        tools:text="2x"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/product_name_tv"
+        android:layout_toEndOf="@id/quantity_tv"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="5dp"
+        tools:text="Hamburger"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/subtotal_tv"
+        android:layout_centerInParent="true"
+        tools:text="10€"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/remove_btn"
+        android:background="@android:drawable/ic_menu_delete"/>
+
+
+
+
+</RelativeLayout>
