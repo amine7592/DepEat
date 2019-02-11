@@ -1,6 +1,8 @@
 package org.elis.depeat.ui.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,15 +22,35 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
     private ArrayList<Product> dataSet;
     private Context context;
     private LayoutInflater inflater;
+    private float miniumOrder;
 
 
-    public  OrderProductsAdapter(Context context, ArrayList<Product> dataSet){
+
+
+    public  OrderProductsAdapter(Context context, ArrayList<Product> dataSet,float miniumOrder){
 
         this.dataSet = dataSet;
         this.context = context;
         inflater = LayoutInflater.from(context);
+        this.miniumOrder = miniumOrder;
     }
 
+    public interface onItemRemovedListener{
+        void onItemRemoved(float subtotal);
+
+    }
+
+
+    private onItemRemovedListener onItemRemovedListener;
+
+
+    public OrderProductsAdapter.onItemRemovedListener getOnItemRemovedListener() {
+        return onItemRemovedListener;
+    }
+
+    public void setOnItemRemovedListener(OrderProductsAdapter.onItemRemovedListener onItemRemovedListener) {
+        this.onItemRemovedListener = onItemRemovedListener;
+    }
 
     @NonNull
     @Override
@@ -50,6 +72,13 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
         return dataSet.size();
     }
 
+    private void removeItem(int index){
+        dataSet.remove(index);
+        notifyItemRemoved(index);
+
+    }
+
+
     public class OrderProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView quantityTv,productNameTv,subtotalTv;
@@ -68,9 +97,25 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
 
         @Override
         public void onClick(View view) {
-            //TODO alertDialog
-            dataSet.remove(getAdapterPosition());
-            notifyItemRemoved(getAdapterPosition());
+            AlertDialog.Builder removeAlert = new AlertDialog.Builder(context);
+            removeAlert.setTitle(R.string.be_careful)
+                    .setMessage(R.string.remove_title)
+                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            onItemRemovedListener.onItemRemoved(dataSet.get(getAdapterPosition()).getSubtotal());
+                            removeItem(getAdapterPosition());
+
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    })
+                    .create()
+                    .show();
+
         }
     }
 }

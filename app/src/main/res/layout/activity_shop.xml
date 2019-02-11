@@ -88,6 +88,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/DepActionButton"
             android:enabled="false"
             android:id="@+id/checkout"
             android:text="@string/checkout"/>

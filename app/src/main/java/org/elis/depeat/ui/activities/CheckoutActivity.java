@@ -16,7 +16,7 @@ import org.elis.depeat.ui.adapters.OrderProductsAdapter;
 
 import java.util.ArrayList;
 
-public class CheckoutActivity extends AppCompatActivity implements View.OnClickListener{
+public class CheckoutActivity extends AppCompatActivity implements View.OnClickListener,OrderProductsAdapter.onItemRemovedListener{
 
     private TextView restaturantTv,restaurantAdress,totalTv;
     private RecyclerView productRv;
@@ -26,8 +26,9 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
 
 
 
-    private Order order;
 
+    private Order order;
+    private float total;
 
 
     @Override
@@ -42,11 +43,13 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
 
         // Initialize datamodel object
         order = getOrder();
+        total = order.getTotal();
 
         // setup recyclerview
         layoutManager = new LinearLayoutManager(this);
         productRv.setLayoutManager(layoutManager);
-        adapter = new OrderProductsAdapter(this,order.getProducts());
+        adapter = new OrderProductsAdapter(this,order.getProducts(),order.getRestaurant().getMinimumOrder());
+        adapter.setOnItemRemovedListener(this);
         productRv.setAdapter(adapter);
 
         //set click listener for button
@@ -87,11 +90,10 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     //TODO hardcoded
     private ArrayList<Product> getProducts() {
         ArrayList<Product> products = new ArrayList<>();
-        products.add(new Product("McMenu", 7));
-        products.add(new Product("McMenu", 7));
-        products.add(new Product("McMenu", 7));
-        products.add(new Product("McMenu", 7));
-        products.add(new Product("McMenu", 7));
+        products.add(new Product("McMenu", 5,2));
+        products.add(new Product("McMenu", 5,2));
+        products.add(new Product("McMenu", 5,2));
+
         return products;
 
     }
@@ -99,5 +101,16 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) {
             //TODO manageClick
+    }
+
+    @Override
+    public void onItemRemoved(float subtotal) {
+        updateTotal(subtotal);
+    }
+
+    private void updateTotal(float subtotal) {
+        if(total == 0) return;
+        total -=subtotal;
+        totalTv.setText(String.valueOf(total));
     }
 }
