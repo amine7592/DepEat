@@ -36,6 +36,16 @@ public class RestaturantAdapter extends RecyclerView.Adapter {
         this.context = context;
     }
 
+    public RestaturantAdapter(Context context){
+        inflater = LayoutInflater.from(context);
+        this.data = new ArrayList<>();
+        this.context = context;
+    }
+
+
+
+
+
 
     public void setGridMode(boolean gridMode) {
         isGridMode = gridMode;
@@ -73,6 +83,11 @@ public class RestaturantAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public void setData(ArrayList<Restaurant> data) {
+        this.data = data;
+        notifyDataSetChanged();
     }
 
 

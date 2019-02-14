@@ -98,7 +98,8 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
         @Override
         public void onClick(View view) {
             AlertDialog.Builder removeAlert = new AlertDialog.Builder(context);
-            removeAlert.setTitle(R.string.be_careful)
+            removeAlert
+                    .setTitle(R.string.be_careful)
                     .setMessage(R.string.remove_title)
                     .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
