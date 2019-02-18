@@ -4,7 +4,7 @@ public class Utils {
 
 
     private static final int LEN_PASSWORD = 6;
-    private static final int PHONE_LENGTH = 10;
+    private static final int USERNAME_LENGTH = 4;
 
 
 
@@ -16,8 +16,8 @@ public class Utils {
         return password.length() > LEN_PASSWORD;
     }
 
-    public static boolean isPhoneValid(String phone) {
-        return phone.length() > PHONE_LENGTH;
+    public static boolean isUsernameValid(String phone) {
+        return phone.length() > USERNAME_LENGTH;
     }
 
 

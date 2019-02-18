@@ -37,14 +37,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
         loginBtn.setOnClickListener(this);
-        //registerBtn.setOnClickListener(this);
+        registerBtn.setOnClickListener(this);
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });
     }
 
 
@@ -93,6 +88,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if(view.getId() == R.id.login_btn){
             doLogin();
+        }else if ( view.getId() == R.id.register_btn) {
+            startActivity(new Intent(this,RegisterActivity.class));
         }
     }
 }

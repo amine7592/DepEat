@@ -6,19 +6,34 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.bumptech.glide.request.Request;
 
 import org.elis.depeat.R;
 import org.elis.depeat.Utils;
+import org.elis.depeat.datamodels.User;
+import org.elis.depeat.services.RestController;
 
-public class RegisterActivity extends AppCompatActivity{
-    EditText emailEt, passwordEt, phoneEt;
+import java.util.HashMap;
+import java.util.Map;
+
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener,Response.Listener<String>,Response.ErrorListener{
+    EditText emailEt, passwordEt, usernameEt;
     Button registerBtn;
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
 
-    boolean isPhoneValid, isPasswordValid, isEmailValid;
+    boolean isUsernameValid, isPasswordValid, isEmailValid;
+
+    RestController restController;
+
+
 
 
     @Override
@@ -27,8 +42,11 @@ public class RegisterActivity extends AppCompatActivity{
         setContentView(R.layout.activity_register);
         emailEt = findViewById(R.id.email_et);
         passwordEt = findViewById(R.id.password_et);
-        phoneEt = findViewById(R.id.phone_et);
+        usernameEt = findViewById(R.id.username);
         registerBtn = findViewById(R.id.register_btn);
+
+        restController =  new RestController(this);
+        registerBtn.setOnClickListener(this);
 
         emailEt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -68,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity{
         });
 
 
-        phoneEt.addTextChangedListener(new TextWatcher() {
+        usernameEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -76,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity{
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                isPhoneValid = Utils.isPhoneValid(charSequence.toString());
+                isUsernameValid = Utils.isUsernameValid(charSequence.toString());
             }
 
             @Override
@@ -92,7 +110,31 @@ public class RegisterActivity extends AppCompatActivity{
 
 
     private void enableButton() {
-        registerBtn.setEnabled(isEmailValid && isPasswordValid && isPhoneValid);
+        registerBtn.setEnabled(isEmailValid && isPasswordValid && isUsernameValid);
     }
 
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.register_btn){
+            Map<String,String> params = new HashMap<>();
+            params.put("username",usernameEt.getText().toString());
+            params.put("email",emailEt.getText().toString());
+            params.put("password",passwordEt.getText().toString());
+
+            restController.postRequest(User.REGISTER_ENDPOINT,params,this,this);
+        }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Log.e(TAG,error.getMessage());
+        Toast.makeText(this,error.getMessage(),Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onResponse(String response) {
+        Log.d(TAG,response);
+
+
+    }
 }

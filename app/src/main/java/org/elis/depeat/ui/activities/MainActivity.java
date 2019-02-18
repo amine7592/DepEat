@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.elis.depeat.R;
 import org.elis.depeat.datamodels.Restaurant;
+import org.elis.depeat.services.RestController;
 import org.elis.depeat.ui.adapters.RestaturantAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,13 +31,15 @@ import org.json.JSONObject;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Response.Listener<String>,Response.ErrorListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     RecyclerView restaurantRV;
     RecyclerView.LayoutManager layoutManager;
     RestaturantAdapter adapter;
     ArrayList<Restaurant> arrayList = new ArrayList<>();
+
+    private RestController restController;
 
     SharedPreferences sharedPreferences;
 
@@ -55,60 +59,11 @@ public class MainActivity extends AppCompatActivity {
         restaurantRV.setLayoutManager(layoutManager);
         restaurantRV.setAdapter(adapter);
 
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://5ba19290ee710f0014dd764c.mockapi.io/api/v1/restaurant";
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, // HTTP request method
-                url, // Server link
-                new Response.Listener<String>() {  // Listener for successful response
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG,response);
-                        //Start parsing
-                        try {
-                            JSONObject responseJson = new JSONObject(response);
-                            JSONArray restaurantJsonArray = responseJson.getJSONArray("data");
-                            for (int i = 0; i< restaurantJsonArray.length(); i++){
-                                Restaurant restaurant = new Restaurant(restaurantJsonArray.getJSONObject(i));
-                                arrayList.add(restaurant);
-                            }
-                            adapter.setData(arrayList);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() { // Listener for error response
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG,error.getMessage());
-                    }
-                }
-        );
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        restController = new RestController(this);
+        restController.getRequest(Restaurant.ENDPOINT,this,this);
 
     }
-
-
-    private ArrayList<Restaurant> getData(){
-        arrayList = new ArrayList<>();
-        arrayList.add(new Restaurant("Burger","via le mani dal naso",2.00f));
-        arrayList.add(new Restaurant("Burger","via le mani dal naso",2.00f));
-        arrayList.add(new Restaurant("Burger","via le mani dal naso",2.00f));
-        arrayList.add(new Restaurant("Burger","via le mani dal naso",2.00f));
-
-
-        return arrayList;
-
-    }
-
+    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -163,6 +118,27 @@ public class MainActivity extends AppCompatActivity {
     private boolean getSavedLayoutManager(){
         sharedPreferences = getSharedPreferences(SharedPrefs,MODE_PRIVATE);
         return sharedPreferences.getBoolean(VIEW_MODE,false);
+
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Log.e(TAG,error.getMessage());
+        Toast.makeText(this,error.getMessage(),Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onResponse(String response) {
+        try {
+            JSONArray jsonArray = new JSONArray(response);
+            for (int i = 0; i<jsonArray.length();i++){
+                arrayList.add(new Restaurant(jsonArray.getJSONObject(i)));
+            }
+            adapter.setData(arrayList);
+
+        } catch (JSONException e) {
+            Log.e(TAG,e.getMessage());
+        }
 
     }
 }

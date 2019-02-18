@@ -13,7 +13,15 @@
             android:layout_width="match_parent"
             android:hint="@string/email_hint"
             android:id="@+id/email_et"
+            android:inputType="text"
             android:layout_height="wrap_content" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/username"
+            android:hint="@string/username"/>
+
 
 
         <EditText
@@ -21,14 +29,10 @@
             android:hint="@string/password_hint"
             android:layout_marginTop="8dp"
             android:id="@+id/password_et"
+            android:inputType="textPassword"
             android:layout_height="wrap_content" />
 
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/phone_et"
-            android:hint="@string/phone"/>
 
 
 

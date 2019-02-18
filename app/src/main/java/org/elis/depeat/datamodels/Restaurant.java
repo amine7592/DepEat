@@ -14,6 +14,8 @@ public class Restaurant {
 
     private String imageUrl;
 
+    public static final String ENDPOINT = "restaurants";
+
 
     private ArrayList<Product> products;
 
@@ -37,7 +39,7 @@ public class Restaurant {
     public Restaurant(JSONObject jsonRestaurant) throws JSONException {
         name = jsonRestaurant.getString("name");
         address = jsonRestaurant.getString("address");
-        minimumOrder = Float.valueOf(jsonRestaurant.getString("min_order"));
+        minimumOrder = (float)jsonRestaurant.getDouble("min_order");
         imageUrl = jsonRestaurant.getString("image_url");
 
     }
