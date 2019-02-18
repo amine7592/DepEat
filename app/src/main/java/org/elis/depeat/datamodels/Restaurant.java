@@ -14,10 +14,11 @@ public class Restaurant {
 
     private String imageUrl;
 
-    public static final String ENDPOINT = "restaurants";
+    public static final String ENDPOINT = "restaurants/";
 
 
     private ArrayList<Product> products;
+    private String id;
 
     public String getImageUrl() {
         return imageUrl;
@@ -37,6 +38,7 @@ public class Restaurant {
     }
 
     public Restaurant(JSONObject jsonRestaurant) throws JSONException {
+        id = jsonRestaurant.getString("id");
         name = jsonRestaurant.getString("name");
         address = jsonRestaurant.getString("address");
         minimumOrder = (float)jsonRestaurant.getDouble("min_order");
@@ -79,5 +81,9 @@ public class Restaurant {
 
     public void setProducts(ArrayList<Product> products) {
         this.products = products;
+    }
+
+    public String getId() {
+        return id;
     }
 }

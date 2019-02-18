@@ -112,7 +112,9 @@ public class RestaturantAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View view) {
             if(view.getId() == R.id.menu_btn){
-                context.startActivity(new Intent(context, ShopActivity.class));
+                Intent intent = new Intent(context, ShopActivity.class);
+                intent.putExtra(ShopActivity.RESTAURANT_ID_KEY,data.get(getAdapterPosition()).getId());
+                context.startActivity(intent);
 
             }
 

@@ -1,5 +1,6 @@
 package org.elis.depeat.ui.activities;
 
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,9 @@ import org.elis.depeat.R;
 import org.elis.depeat.Utils;
 import org.elis.depeat.datamodels.User;
 import org.elis.depeat.services.RestController;
+import org.elis.depeat.ui.SharedPreferencesUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -134,6 +138,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onResponse(String response) {
         Log.d(TAG,response);
+        try {
+            JSONObject responseJson = new JSONObject(response);
+            String accessToken = responseJson.getString("jwt");
+            SharedPreferencesUtils.putValue(this,User.ACCESS_TOKEN_KEY,accessToken);
+
+            User user = new User(responseJson.getJSONObject("user"),accessToken);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
 
     }

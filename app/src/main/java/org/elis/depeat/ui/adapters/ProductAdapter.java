@@ -19,6 +19,13 @@ public class ProductAdapter extends RecyclerView.Adapter {
 
     private LayoutInflater mInflter;
     private ArrayList<Product> data;
+    private OnQuanityChangedListener onQuanityChangedListener;
+
+    public interface OnQuanityChangedListener {
+        void onChange(float price);
+
+    }
+
 
 
     public ProductAdapter(Context context, ArrayList<Product> data) {
@@ -29,10 +36,13 @@ public class ProductAdapter extends RecyclerView.Adapter {
 
     }
 
-    public interface OnQuanityChangedListener {
-        void onChange(float price);
+    public ProductAdapter(Context context) {
 
+        this.data = new ArrayList<>();
+        mInflter = LayoutInflater.from(context);
     }
+
+
 
     public OnQuanityChangedListener getOnQuanityChangedListener() {
         return onQuanityChangedListener;
@@ -42,9 +52,13 @@ public class ProductAdapter extends RecyclerView.Adapter {
         this.onQuanityChangedListener = onQuanityChangedListener;
     }
 
-    private OnQuanityChangedListener onQuanityChangedListener;
 
 
+
+    public void setData(ArrayList<Product> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

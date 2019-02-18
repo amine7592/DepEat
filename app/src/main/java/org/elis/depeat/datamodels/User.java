@@ -1,11 +1,35 @@
 package org.elis.depeat.datamodels;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class User {
 
     public static final String REGISTER_ENDPOINT = "auth/local/register";
     public static final String LOGIN_ENDPOINT = "auth/local";
+    public static final String ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY";
 
-    private String username,email,accessToken;
+
+    private String id, username, email, accessToken;
+
+
+    public User(JSONObject user, String accessToken) throws JSONException {
+
+        this.accessToken = accessToken;
+        email = user.getString("email");
+        id = user.getString("id");
+        username = user.getString("username");
+
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;

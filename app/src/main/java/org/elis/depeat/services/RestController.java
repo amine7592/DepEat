@@ -3,6 +3,7 @@ package org.elis.depeat.services;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -27,7 +28,8 @@ public class RestController {
 
     public void getRequest(String endpoint, Response.Listener<String> success, Response.ErrorListener error){
 
-        StringRequest request = new StringRequest(Request.Method.GET,
+        StringRequest request = new StringRequest(
+                Request.Method.GET,
                 BASE_URL.concat(VERSION).concat(endpoint),
                 success,
                 error
@@ -39,13 +41,14 @@ public class RestController {
     public void postRequest(String endpoint, final Map<String,String> params, Response.Listener<String> success, Response.ErrorListener error){
 
         String url = BASE_URL.concat(VERSION).concat(endpoint);
-        StringRequest request = new StringRequest(Request.Method.POST, url, success,error) {
-            @Override
-            protected Map<String,String> getParams(){
-                return params;
-            }
+        StringRequest request = new StringRequest(Request.Method.POST, url, success,error){
 
+            @Override
+            protected Map<String, String> getParams(){
+               return params;
+            }
         };
+
 
         queue.add(request);
     }
