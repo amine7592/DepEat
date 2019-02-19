@@ -21,6 +21,10 @@ public class ProductAdapter extends RecyclerView.Adapter {
     private ArrayList<Product> data;
     private OnQuanityChangedListener onQuanityChangedListener;
 
+    public ArrayList<Product> getData() {
+        return data;
+    }
+
     public interface OnQuanityChangedListener {
         void onChange(float price);
 

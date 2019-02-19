@@ -1,13 +1,25 @@
 package org.elis.depeat.datamodels;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.TypeConverters;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@Entity(tableName = "Product")
 public class Product {
 
+    @ColumnInfo(name = "name")
     private String name;
+
+    @ColumnInfo(name = "quantity")
     private int quantity = 0;
+
+    @ColumnInfo(name = "price")
     private float price;
+
+    @ColumnInfo(name = "product_id")
     private String id;
 
 
@@ -17,6 +29,15 @@ public class Product {
         this.price = price;
     }
 
+
+    public String getId() {
+
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
 
     public Product(String name, float price, int quantity){

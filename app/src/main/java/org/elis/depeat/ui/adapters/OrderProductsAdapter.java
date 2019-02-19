@@ -15,11 +15,12 @@ import org.elis.depeat.R;
 import org.elis.depeat.datamodels.Product;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.Inflater;
 
 public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdapter.OrderProductViewHolder>{
 
-    private ArrayList<Product> dataSet;
+    private List<Product> dataSet;
     private Context context;
     private LayoutInflater inflater;
     private float miniumOrder;
@@ -27,7 +28,7 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
 
 
 
-    public  OrderProductsAdapter(Context context, ArrayList<Product> dataSet,float miniumOrder){
+    public  OrderProductsAdapter(Context context, List<Product> dataSet,float miniumOrder){
 
         this.dataSet = dataSet;
         this.context = context;

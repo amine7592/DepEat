@@ -2,7 +2,10 @@ package org.elis.depeat.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,17 +27,22 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 
 import org.elis.depeat.R;
+import org.elis.depeat.datamodels.Order;
 import org.elis.depeat.datamodels.Product;
 import org.elis.depeat.datamodels.Restaurant;
+import org.elis.depeat.services.AppDatabase;
 import org.elis.depeat.services.RestController;
+import org.elis.depeat.ui.SharedPreferencesUtils;
 import org.elis.depeat.ui.adapters.ProductAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
-public class ShopActivity extends AppCompatActivity implements ProductAdapter.OnQuanityChangedListener,Response.Listener<String>,Response.ErrorListener{
+public class ShopActivity extends AppCompatActivity implements ProductAdapter.OnQuanityChangedListener,Response.Listener<String>,Response.ErrorListener, View.OnClickListener {
 
     public static final String RESTAURANT_ID_KEY = "RESTAURANT_ID_KEY";
     private static final String TAG = ShopActivity.class.getSimpleName();
@@ -65,7 +73,6 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
     private String restaurantId;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,12 +94,7 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
         ((SimpleItemAnimator) productRv.getItemAnimator()).setSupportsChangeAnimations(false);
         productRv.setAdapter(adapter);
 
-        checkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ShopActivity.this,CheckoutActivity.class));
-            }
-        });
+        checkout.setOnClickListener(this);
 
         restaurantId = getIntent().getStringExtra(ShopActivity.RESTAURANT_ID_KEY);
         restController = new RestController(this);
@@ -105,11 +107,10 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.shop_menu,menu);
+        inflater.inflate(R.menu.shop_menu, menu);
         this.menu = menu;
         return true;
     }
@@ -117,36 +118,36 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.login_menu){
-            Intent intent = new Intent(this,LoginActivity.class);
-            startActivityForResult(intent,LOGIN_REQUEST_CODE);
+        if (item.getItemId() == R.id.login_menu) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, LOGIN_REQUEST_CODE);
 
 
-        }else if(item.getItemId() == R.id.checkout_menu){
+        } else if (item.getItemId() == R.id.checkout_menu) {
 
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateTotal(float item){
-        total= total + item;
+    private void updateTotal(float item) {
+        total = total + item;
         totalTxtView.setText(getString(R.string.total).concat(String.valueOf(total)));
     }
 
-    private void updateProgress(int progress){
+    private void updateProgress(int progress) {
         progressBar.setProgress(progress);
     }
 
-    private void enableBttuon(){
-        checkout.setEnabled(total>=restaurant.getMinimumOrder());
+    private void enableBttuon() {
+        checkout.setEnabled(total >= restaurant.getMinimumOrder());
     }
 
 
-    private void bindData(){
+    private void bindData() {
         shopNameTv.setText(restaurant.getName());
         shopAddress.setText(restaurant.getAddress());
         Glide.with(this).load(restaurant.getImageUrl()).into(restaurantIv);
-        progressBar.setMax((int)restaurant.getMinimumOrder()*100);
+        progressBar.setMax((int) restaurant.getMinimumOrder() * 100);
         adapter.setData(restaurant.getProducts());
 
 
@@ -155,18 +156,18 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.d(TAG,"requestCode " + requestCode);
-        Log.d(TAG,"resultCode " + resultCode);
+        Log.d(TAG, "requestCode " + requestCode);
+        Log.d(TAG, "resultCode " + resultCode);
 
-        if(requestCode == LOGIN_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+        if (requestCode == LOGIN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             // TODO login is successful manage result
 
-            Log.d(TAG,data.getStringExtra("response"));
+            Log.d(TAG, data.getStringExtra("response"));
             menu.findItem(R.id.login_menu).setTitle(R.string.profile)
                     .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem) {
-                            startActivity(new Intent(ShopActivity.this,ProfileActivity.class));
+                            startActivity(new Intent(ShopActivity.this, ProfileActivity.class));
                             return true;
                         }
                     });
@@ -178,14 +179,14 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
     @Override
     public void onChange(float price) {
         updateTotal(price);
-        updateProgress((int)total*100);
+        updateProgress((int) total * 100);
         enableBttuon();
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Log.e(TAG,error.getMessage());
-        Toast.makeText(this,error.getMessage(),Toast.LENGTH_LONG).show();
+        Log.e(TAG, error.getMessage());
+        Toast.makeText(this, error.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -197,7 +198,7 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
             JSONArray jsonProducts = jsonObject.getJSONArray("products");
             ArrayList<Product> products = new ArrayList<>();
 
-            for (int i = 0; i<jsonProducts.length(); i++){
+            for (int i = 0; i < jsonProducts.length(); i++) {
                 products.add(new Product(jsonProducts.getJSONObject(i)));
             }
 
@@ -206,11 +207,52 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
             bindData();
 
 
-
-
-
         } catch (JSONException e) {
-            Log.e(TAG,e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
     }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.checkout) {
+      //      if (SharedPreferencesUtils.getStringValue(ShopActivity.this, "jwt") != null) {
+                new SaveOrder().execute();
+
+//            }
+
+        }
+    }
+
+
+
+
+    class SaveOrder extends AsyncTask<Void, Void, Void> {
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Order order = new Order();
+            order.setTotal(total);
+            order.setRestaurant(restaurant);
+
+            List<Product> selected = adapter.getData();
+            selected.removeIf(product -> product.getQuantity()<1);
+
+            order.setProducts(selected);
+
+            AppDatabase dbInstance = AppDatabase.getAppDatabase(ShopActivity.this);
+            dbInstance.clearAllTables();
+            dbInstance.orderDao().insert(order);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            startActivity(new Intent(ShopActivity.this,CheckoutActivity.class));
+
+        }
+    }
+
 }

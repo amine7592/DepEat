@@ -1,24 +1,48 @@
 package org.elis.depeat.datamodels;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+@Entity(tableName = "Restaurant")
 public class Restaurant {
 
+    @ColumnInfo(name = "name")
     private String name;
+
+    @ColumnInfo(name = "address")
     private String address;
+
+    @ColumnInfo(name = "minimum_order")
     private float minimumOrder;
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @ColumnInfo(name = "description")
     private String description;
 
+    @ColumnInfo(name = "image_url")
     private String imageUrl;
+
+    @ColumnInfo(name = "restaurant_id")
+    private String id;
+
 
     public static final String ENDPOINT = "restaurants/";
 
-
+    @Ignore
     private ArrayList<Product> products;
-    private String id;
 
     public String getImageUrl() {
         return imageUrl;

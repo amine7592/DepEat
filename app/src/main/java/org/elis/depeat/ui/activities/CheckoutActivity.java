@@ -1,5 +1,6 @@
 package org.elis.depeat.ui.activities;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import org.elis.depeat.R;
 import org.elis.depeat.datamodels.Order;
 import org.elis.depeat.datamodels.Product;
 import org.elis.depeat.datamodels.Restaurant;
+import org.elis.depeat.services.AppDatabase;
 import org.elis.depeat.ui.adapters.OrderProductsAdapter;
 
 import java.util.ArrayList;
@@ -74,12 +76,10 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
 
     private Order getOrder(){
 
-        Order mockOrder =  new Order();
-        mockOrder.setProducts(getProducts());
-        mockOrder.setRestaurant(getRestaurant());
-        mockOrder.setTotal(30.00f);
+        return AppDatabase.getAppDatabase(CheckoutActivity.this).orderDao().getAll().get(0);
 
-        return mockOrder;
+
+
     }
 
 
@@ -113,4 +113,7 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         total -=subtotal;
         totalTv.setText(String.valueOf(total));
     }
+
+
+
 }
