@@ -3,6 +3,7 @@ package org.elis.depeat.ui.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.StringRes;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,9 @@ import org.elis.depeat.R;
 import org.elis.depeat.Utils;
 import org.elis.depeat.datamodels.User;
 import org.elis.depeat.services.RestController;
+import org.elis.depeat.ui.SharedPreferencesUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -124,12 +128,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onResponse(String response) {
         Log.d(TAG,response);
-        Intent i = new Intent();
-        i.putExtra("response",response);
-        setResult(Activity.RESULT_OK,i);
-        finish();
 
+        try {
+            JSONObject jsonResponse = new JSONObject(response);
+            SharedPreferencesUtils.putValue(this,"jwt",jsonResponse.getString("jwt"));
 
+            //SEND A broadcast
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.LOGIN_ACTION));
+            setResult(RESULT_OK);
+            finish();
+
+        } catch (JSONException e) {
+            Log.e(TAG,e.getMessage());
+        }
 
 
         //TODO fare cose
