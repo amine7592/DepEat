@@ -240,9 +240,9 @@ public class ShopActivity extends AppCompatActivity implements ProductAdapter.On
 
             order.setProducts(selected);
 
-            AppDatabase dbInstance = AppDatabase.getAppDatabase(ShopActivity.this);
-            dbInstance.clearAllTables();
-            dbInstance.orderDao().insert(order);
+            AppDatabase.getAppDatabase(ShopActivity.this)
+                    .orderDao()
+                    .insert(order);
 
             return null;
         }

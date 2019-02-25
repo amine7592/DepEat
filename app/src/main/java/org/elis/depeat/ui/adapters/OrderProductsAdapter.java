@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import org.elis.depeat.R;
 import org.elis.depeat.datamodels.Product;
+import org.elis.depeat.ui.activities.CheckoutActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.zip.Inflater;
 
 public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdapter.OrderProductViewHolder>{
 
-    private List<Product> dataSet;
+    private List<Product> dataSet = new ArrayList<>();
     private Context context;
     private LayoutInflater inflater;
     private float miniumOrder;
@@ -36,9 +37,23 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
         this.miniumOrder = miniumOrder;
     }
 
+    public OrderProductsAdapter(Context context) {
+        this.context = context;
+        inflater = LayoutInflater.from(context);
+    }
+
+
+
     public interface onItemRemovedListener{
         void onItemRemoved(float subtotal);
 
+    }
+
+
+
+    public void setData(List<Product> dataSet) {
+        this.dataSet = dataSet;
+        notifyDataSetChanged();
     }
 
 

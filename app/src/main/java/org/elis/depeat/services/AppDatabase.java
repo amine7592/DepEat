@@ -25,10 +25,9 @@ public abstract class AppDatabase extends RoomDatabase {
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(
-                    context.getApplicationContext(), AppDatabase.class, "orders-database")
-                    // allow queries on the main thread.
-                    // Don't do this on a real app! See PersistenceBasicSample for an example.
-                    .allowMainThreadQueries()
+                    context,
+                    AppDatabase.class,
+                    "orders-database")
                     .build();
         }
         return INSTANCE;
@@ -40,19 +39,6 @@ public abstract class AppDatabase extends RoomDatabase {
         INSTANCE = null;
     }
 
-    @Override
-    protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration config) {
-        return null;
-    }
 
-    @Override
-    protected InvalidationTracker createInvalidationTracker() {
-        return null;
-    }
-
-    @Override
-    public void clearAllTables() {
-
-    }
 
 }

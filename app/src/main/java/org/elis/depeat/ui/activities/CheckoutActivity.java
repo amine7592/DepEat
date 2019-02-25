@@ -1,6 +1,9 @@
 package org.elis.depeat.ui.activities;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +20,7 @@ import org.elis.depeat.services.AppDatabase;
 import org.elis.depeat.ui.adapters.OrderProductsAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CheckoutActivity extends AppCompatActivity implements View.OnClickListener,OrderProductsAdapter.onItemRemovedListener{
 
@@ -27,9 +31,6 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     private OrderProductsAdapter adapter;
 
 
-
-
-    private Order order;
     private float total;
 
 
@@ -43,29 +44,27 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         productRv = findViewById(R.id.product_rv);
         payBtn = findViewById(R.id.pay_btn);
 
-        // Initialize datamodel object
-        order = getOrder();
-        total = order.getTotal();
-
         // setup recyclerview
         layoutManager = new LinearLayoutManager(this);
         productRv.setLayoutManager(layoutManager);
-        adapter = new OrderProductsAdapter(this,order.getProducts(),order.getRestaurant().getMinimumOrder());
+        adapter = new OrderProductsAdapter(this);
         adapter.setOnItemRemovedListener(this);
         productRv.setAdapter(adapter);
 
         //set click listener for button
         payBtn.setOnClickListener(this);
 
-        bindData();
+        new GetOrder().execute();
+
 
     }
 
 
-    private void bindData(){
+    private void bindData(Order order){
         restaturantTv.setText(order.getRestaurant().getName());
         restaurantAdress.setText(order.getRestaurant().getAddress());
         totalTv.setText(String.valueOf(order.getTotal()));
+        adapter.setData(order.getProducts());
 
 
 
@@ -74,13 +73,28 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
 
     //TODO hardcoded
 
-    private Order getOrder(){
-
-        return AppDatabase.getAppDatabase(CheckoutActivity.this).orderDao().getAll().get(0);
 
 
+    class GetOrder extends AsyncTask<Void, Void, Void> {
 
+        private List<Order> orders;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+           this.orders = AppDatabase.getAppDatabase(CheckoutActivity.this).orderDao().getAll();
+           return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            bindData(orders.get(0));
+        }
     }
+
+
+
+
+
 
 
     private Restaurant getRestaurant() {
